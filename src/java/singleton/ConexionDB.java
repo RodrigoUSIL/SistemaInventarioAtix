@@ -51,13 +51,28 @@ public class ConexionDB {
         return instancia;
     }
 
-    // retorna la conexion, reconecta si es necesario
+// retorna la conexion, reconecta si es necesario
     public Connection getConnection() {
         try {
+            // si la conexion es nula o esta cerrada, intenta reconectar directamente
             if (connection == null || connection.isClosed()) {
-                instancia = new ConexionDB();
+                // carga el driver de mysql
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                // obtiene los valores de las variables de entorno o usa los locales
+                String url = System.getenv("DB_URL") != null
+                        ? System.getenv("DB_URL")
+                        : "jdbc:mysql://localhost:3306/InventarioAtix?useSSL=false&serverTimezone=America/Lima";
+                String user = System.getenv("DB_USER") != null
+                        ? System.getenv("DB_USER")
+                        : "root";
+                String password = System.getenv("DB_PASSWORD") != null
+                        ? System.getenv("DB_PASSWORD")
+                        : "Root_123";
+                // reconecta con los datos correctos
+                this.connection = DriverManager.getConnection(url, user, password);
+                System.out.println("reconexion exitosa");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.err.println("error verificando conexion: " + e.getMessage());
         }
         return connection;
