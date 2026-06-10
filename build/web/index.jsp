@@ -1,11 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page session="true"%>
-<%@page import="modelo.Usuario"%>
 <%
-    // verifica si hay sesion activa, si no redirige al login
-    Usuario usuarioActivo = (Usuario) session.getAttribute("usuarioActivo");
-    if (usuarioActivo == null) {
-        response.sendRedirect("login.jsp");
+    // si ya hay sesion activa redirige al dashboard
+    if (session.getAttribute("usuarioActivo") != null) {
+        response.sendRedirect("dashboard.jsp");
         return;
     }
 %>
@@ -13,106 +11,149 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Menu Principal - Sistema de Inventarios</title>
+    <title>Distribuidora Atix S.A.C. - Sistema de Inventarios</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #f0f0f0;
             min-height: 100vh;
         }
-
         .header {
             background: #8B0033;
-            color: white;
-            padding: 16px 24px;
-        }
-
-        .header h1 {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .header p {
-            font-size: 12px;
-            color: #f5b8c8;
-            margin-top: 4px;
-        }
-
-        .contenido {
-            padding: 30px;
-        }
-
-        .label-menu {
-            font-size: 13px;
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 16px;
-        }
-
-        .btn-modulo {
-            display: block;
-            width: 320px;
-            padding: 12px 16px;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 13px;
-            color: #333;
-            text-decoration: none;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .btn-modulo:hover { background: #f5f5f5; }
-
-        .footer {
-            background: #ebebeb;
-            padding: 12px 24px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            padding: 14px 32px;
             display: flex;
-            justify-content: flex-end;
+            align-items: center;
+            justify-content: space-between;
         }
-
-        .btn-cerrar {
+        .header .brand {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .header .brand span {
+            font-size: 11px;
+            color: #f5b8c8;
+            display: block;
+            font-weight: normal;
+        }
+        .hero {
+            padding: 60px 32px 40px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 26px;
+            font-weight: bold;
+            color: #8B0033;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 14px;
+            color: #555;
+            max-width: 420px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+        .btn-guinda {
             background: #8B0033;
             color: white;
             border: none;
+            padding: 11px 32px;
             border-radius: 3px;
-            padding: 8px 16px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
         }
-
-        .btn-cerrar:hover { background: #6d0028; }
+        .btn-guinda:hover { background: #6d0028; }
+        .btn-outline {
+            background: white;
+            color: #8B0033;
+            border: 1px solid #8B0033;
+            padding: 10px 32px;
+            border-radius: 3px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .btn-outline:hover { background: #f5f5f5; }
+        .cards {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            padding: 0 32px 40px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            width: 160px;
+            text-align: center;
+        }
+        .card .icono {
+            font-size: 28px;
+            color: #8B0033;
+            margin-bottom: 8px;
+        }
+        .card p {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.5;
+        }
+        .footer {
+            background: #8B0033;
+            color: #f5b8c8;
+            text-align: center;
+            padding: 12px;
+            font-size: 11px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-
     <div class="header">
-        <h1>Sistema de Gestión de Inventarios</h1>
-        <%-- muestra el nombre del usuario activo desde la sesion --%>
-        <p>Bienvenido, <%= usuarioActivo.getNomUsuario() %>!</p>
+        <div class="brand">
+            Distribuidora Atix S.A.C.
+            <span>Sistema de Gestión de Inventarios</span>
+        </div>
     </div>
 
-    <div class="contenido">
-        <p class="label-menu">Seleccione un modulo:</p>
+    <div class="hero">
+        <h1>Bienvenido al sistema de inventarios</h1>
+        <p>Plataforma interna para la administración de productos, control de stock y movimientos del almacén de Distribuidora Atix S.A.C., Ayacucho.</p>
+        <a href="login.jsp" class="btn-guinda">Iniciar sesión</a>
+        <a href="registro.jsp" class="btn-outline">Crear cuenta</a>
+    </div>
 
-        <%-- botones de modulos, se iran agregando conforme avance el proyecto --%>
-        <a href="#" class="btn-modulo">Gestión de Productos</a>
-        <a href="#" class="btn-modulo">Movimientos de Inventario</a>
-        <a href="#" class="btn-modulo">Reportes</a>
+    <div class="cards">
+        <div class="card">
+            <div class="icono">📦</div>
+            <p>Control de productos y stock en tiempo real</p>
+        </div>
+        <div class="card">
+            <div class="icono">🔄</div>
+            <p>Registro de entradas y salidas del almacén</p>
+        </div>
+        <div class="card">
+            <div class="icono">🔍</div>
+            <p>Filtrado rápido por categoría de producto</p>
+        </div>
+        <div class="card">
+            <div class="icono">🔒</div>
+            <p>Acceso seguro con roles de usuario</p>
+        </div>
     </div>
 
     <div class="footer">
-        <%-- cierra la sesion y redirige al login --%>
-        <a href="cerrarSesion.jsp" class="btn-cerrar">Cerrar Sesión</a>
+        © 2025 Distribuidora Atix S.A.C. — Ayacucho, Perú
     </div>
-
 </body>
 </html>

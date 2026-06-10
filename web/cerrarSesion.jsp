@@ -4,5 +4,5 @@
     // invalida la sesion actual eliminando todos los atributos
     session.invalidate();
     // redirige al login despues de cerrar sesion
-    response.sendRedirect("login.jsp");
+    response.sendRedirect("index.jsp");
 %>

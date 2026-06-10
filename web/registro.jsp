@@ -3,7 +3,7 @@
 <%
     // si ya hay sesion activa redirige al menu principal
     if (session.getAttribute("usuarioActivo") != null) {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("dashboard.jsp");
         return;
     }
 
@@ -12,138 +12,144 @@
 %>
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Registro - Sistema de Inventarios</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    <head>
+        <meta charset="UTF-8">
+        <title>Registro - Sistema de Inventarios</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+            body {
+                font-family: 'Segoe UI', sans-serif;
+                background: #f0f0f0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
 
-        .card {
-            background: white;
-            border: 2px solid #8B0033;
-            border-radius: 4px;
-            padding: 30px 40px;
-            width: 460px;
-        }
+            .card {
+                background: white;
+                border: 2px solid #8B0033;
+                border-radius: 4px;
+                padding: 30px 40px;
+                width: 460px;
+            }
 
-        .titulo {
-            text-align: center;
-            color: #8B0033;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
+            .titulo {
+                text-align: center;
+                color: #8B0033;
+                font-size: 20px;
+                font-weight: bold;
+                margin-bottom: 4px;
+            }
 
-        .subtitulo {
-            text-align: center;
-            color: #646464;
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
+            .subtitulo {
+                text-align: center;
+                color: #646464;
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
 
-        .separador {
-            border: none;
-            border-top: 1.5px solid #8B0033;
-            margin-bottom: 20px;
-        }
+            .separador {
+                border: none;
+                border-top: 1.5px solid #8B0033;
+                margin-bottom: 20px;
+            }
 
-        label {
-            display: block;
-            font-size: 14px;
-            color: #000;
-            margin-bottom: 6px;
-        }
+            label {
+                display: block;
+                font-size: 14px;
+                color: #000;
+                margin-bottom: 6px;
+            }
 
-        input[type="text"],
-        input[type="password"],
-        input[type="email"] {
-            width: 100%;
-            padding: 8px 10px;
-            background: white;
-            color: #333;
-            border: 1px solid #8B0033;
-            border-radius: 3px;
-            font-size: 13px;
-            margin-bottom: 14px;
-        }
-        
+            input[type="text"],
+            input[type="password"],
+            input[type="email"] {
+                width: 100%;
+                padding: 8px 10px;
+                background: white;
+                color: #333;
+                border: 1px solid #8B0033;
+                border-radius: 3px;
+                font-size: 13px;
+                margin-bottom: 14px;
+            }
 
-        .btn-principal {
-            width: 100%;
-            padding: 10px;
-            background: #8B0033;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
 
-        .btn-principal:hover { background: #6d0028; }
+            .btn-principal {
+                width: 100%;
+                padding: 10px;
+                background: #8B0033;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                font-size: 13px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-bottom: 10px;
+            }
 
-        .link-centro {
-            text-align: center;
-        }
+            .btn-principal:hover {
+                background: #6d0028;
+            }
 
-        .link-centro a {
-            color: #8B0033;
-            font-size: 12px;
-            font-weight: bold;
-            text-decoration: none;
-        }
+            .link-centro {
+                text-align: center;
+            }
 
-        .mensaje-error {
-            background: #ffe0e0;
-            color: #cc0000;
-            padding: 8px 12px;
-            border-radius: 3px;
-            font-size: 12px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <p class="titulo">Crear nueva cuenta</p>
-        <p class="subtitulo">Complete los campos para registrarse</p>
-        <hr class="separador">
+            .link-centro a {
+                color: #8B0033;
+                font-size: 12px;
+                font-weight: bold;
+                text-decoration: none;
+            }
 
-        <%-- muestra error si existe --%>
-        <% if (error != null && !error.isEmpty()) { %>
-            <div class="mensaje-error"><%= error %></div>
-        <% } %>
+            .mensaje-error {
+                background: #ffe0e0;
+                color: #cc0000;
+                padding: 8px 12px;
+                border-radius: 3px;
+                font-size: 12px;
+                margin-bottom: 12px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <p class="titulo">Crear nueva cuenta</p>
+            <p class="subtitulo">Complete los campos para registrarse</p>
+            <hr class="separador">
 
-        <form method="post" action="registro">
-            <label>Usuario:</label>
-            <input type="text" name="nomUsuario" />
+            <%-- muestra error si existe --%>
+            <% if (error != null && !error.isEmpty()) {%>
+            <div class="mensaje-error"><%= error%></div>
+            <% }%>
 
-            <label>Correo (opcional):</label>
-            <input type="email" name="correo" />
+            <form method="post" action="registro">
+                <label>Usuario:</label>
+                <input type="text" name="nomUsuario" />
 
-            <label>Contraseña:</label>
-            <input type="password" name="contrasena" />
+                <label>Correo (opcional):</label>
+                <input type="email" name="correo" />
 
-            <label>Confirmar contraseña:</label>
-            <input type="password" name="confirmar" />
+                <label>Contraseña:</label>
+                <input type="password" name="contrasena" />
 
-            <button type="submit" class="btn-principal">Registrar Usuario</button>
-        </form>
+                <label>Confirmar contraseña:</label>
+                <input type="password" name="confirmar" />
 
-        <div class="link-centro">
-            <a href="login.jsp">Volver al inicio de sesión</a>
+                <button type="submit" class="btn-principal">Registrar Usuario</button>
+            </form>
+
+            <div class="link-centro">
+                <a href="login.jsp">Volver al inicio de sesión</a>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

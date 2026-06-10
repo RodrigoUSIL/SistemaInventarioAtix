@@ -3,7 +3,7 @@
 <%
     // si ya hay sesion activa redirige al menu principal
     if (session.getAttribute("usuarioActivo") != null) {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("dashboard.jsp");
         return;
     }
 

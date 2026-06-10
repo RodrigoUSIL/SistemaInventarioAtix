@@ -65,7 +65,7 @@ public class LoginServlet extends HttpServlet {
             // guarda el usuario activo en la sesion
             session.setAttribute("usuarioActivo", usuario);
             // redirige al menu principal
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("dashboard");
         } else { // si las credenciales son incorrectas, incrementa el contador y muestra error indicando cuantos intentos quedan
             intentos++;
             session.setAttribute("intentos", intentos);
