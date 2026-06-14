@@ -11,10 +11,11 @@
     }
 
     // recupera los datos enviados por el servlet
-    int totalProductos = (int) request.getAttribute("totalProductos");
-    int totalCategorias = (int) request.getAttribute("totalCategorias");
-    int stockBajo = (int) request.getAttribute("stockBajo");
-    int movimientosHoy = (int) request.getAttribute("movimientosHoy");
+    Integer totalProductos = (Integer) request.getAttribute("totalProductos");
+    Integer totalCategorias = (Integer) request.getAttribute("totalCategorias");
+    Integer stockBajo = (Integer) request.getAttribute("stockBajo");
+    Integer movimientosHoy = (Integer) request.getAttribute("movimientosHoy");
+    if (totalProductos == null) { response.sendRedirect("dashboard"); return; }
     List<String[]> ultimosMovimientos = (List<String[]>) request.getAttribute("ultimosMovimientos");
 %>
 <!DOCTYPE html>
