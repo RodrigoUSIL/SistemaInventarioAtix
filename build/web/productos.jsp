@@ -144,7 +144,7 @@
         <div class="nav-modulos">
             <a href="dashboard" class="btn-modulo">Dashboard</a>
             <a href="productos" class="btn-modulo activo">Gestión de productos</a>
-            <a href="#" class="btn-modulo">Movimientos</a>
+            <a href="movimientos" class="btn-modulo">Movimientos</a>
         </div>
 
         <%-- mensajes de error o exito --%>

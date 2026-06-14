@@ -20,6 +20,10 @@
         <servlet-name>ProductoServlet</servlet-name>
         <servlet-class>controlador.ProductoServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>MovimientoServlet</servlet-name>
+        <servlet-class>controlador.MovimientoServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -39,5 +43,9 @@
     <servlet-mapping>
         <servlet-name>ProductoServlet</servlet-name>
         <url-pattern>/productos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MovimientoServlet</servlet-name>
+        <url-pattern>/movimientos</url-pattern>
     </servlet-mapping>
 </web-app>
