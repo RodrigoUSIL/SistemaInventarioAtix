@@ -5,17 +5,26 @@
         <group>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/singleton/ConexionDB.java</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/controlador/CambiarContrasenaServlet.java</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/controlador/ProductoServlet.java</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/login.jsp</file>
-            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/index.jsp</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/index.jsp</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/repository/IProductoRepository.java</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/productos.jsp</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/modelo/Usuario.java</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/cambiarContrasena.jsp</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/repository/IUsuarioRepository.java</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/dashboard.jsp</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/repository/UsuarioRepository.java</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/controlador/DashboardServlet.java</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/repository/ProductoRepository.java</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/META-INF/context.xml</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/controlador/LoginServlet.java</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/controlador/RegistroServlet.java</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/repository/IRepository.java</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/registro.jsp</file>
             <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/web/cerrarSesion.jsp</file>
+            <file>file:/C:/Users/Rodrigo/Desktop/R.USL/CICLO%205/POO%202/TF/SistemaInventarioTF/src/java/modelo/Producto.java</file>
         </group>
     </open-files>
 </project-private>

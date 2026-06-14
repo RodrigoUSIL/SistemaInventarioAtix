@@ -13,10 +13,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import modelo.Usuario;
 import singleton.ConexionDB;
 
-// servlet que carga los datos del dashboard principal
+// servlet que carga los datos del dashboard usando programacion concurrente
 @WebServlet(name = "DashboardServlet", urlPatterns = {"/dashboard"})
 public class DashboardServlet extends HttpServlet {
 
@@ -29,7 +31,7 @@ public class DashboardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // verifica que haya sesion activa, sino redirige al login
+        // verifica que haya sesion activa, sino redirige al index
         HttpSession session = request.getSession();
         Usuario usuarioActivo = (Usuario) session.getAttribute("usuarioActivo");
         if (usuarioActivo == null) {
@@ -37,55 +39,82 @@ public class DashboardServlet extends HttpServlet {
             return;
         }
 
-        // consulta el total de productos activos
+        // ejecuta las 4 consultas en paralelo usando completablefuture
+        // consulta total de productos activos en un hilo separado
+        CompletableFuture<Integer> futureProductos = CompletableFuture.supplyAsync(() -> {
+            String sql = "SELECT COUNT(*) FROM Producto WHERE estado = 'Activo'";
+            try (PreparedStatement ps = getConn().prepareStatement(sql)) {
+                ResultSet rs = ps.executeQuery(); // ejecuta la consulta
+                if (rs.next()) {
+                    return rs.getInt(1); // retorna el total de productos
+                }
+            } catch (SQLException e) {
+                System.err.println("error contando productos: " + e.getMessage());
+            }
+            return 0; // retorna 0 si hubo un error
+        });
+
+        // consulta total de categorias activas en un hilo separado
+        CompletableFuture<Integer> futureCategorias = CompletableFuture.supplyAsync(() -> {
+            String sql = "SELECT COUNT(*) FROM Categoria WHERE estado = 'Activo'";
+            try (PreparedStatement ps = getConn().prepareStatement(sql)) {
+                ResultSet rs = ps.executeQuery(); // ejecuta la consulta
+                if (rs.next()) {
+                    return rs.getInt(1); // retorna el total de categorias
+                }
+            } catch (SQLException e) {
+                System.err.println("error contando categorias: " + e.getMessage());
+            }
+            return 0; // retorna 0 si hubo un error
+        });
+
+        // consulta productos con stock bajo en un hilo separado
+        CompletableFuture<Integer> futureStockBajo = CompletableFuture.supplyAsync(() -> {
+            String sql = "SELECT COUNT(*) FROM Producto WHERE stock < 10 AND estado = 'Activo'";
+            try (PreparedStatement ps = getConn().prepareStatement(sql)) {
+                ResultSet rs = ps.executeQuery(); // ejecuta la consulta
+                if (rs.next()) {
+                    return rs.getInt(1); // retorna el total de productos con stock bajo
+                }
+            } catch (SQLException e) {
+                System.err.println("error contando stock bajo: " + e.getMessage());
+            }
+            return 0; // retorna 0 si hubo un error
+        });
+
+        // consulta movimientos de hoy en un hilo separado
+        CompletableFuture<Integer> futureMovimientos = CompletableFuture.supplyAsync(() -> {
+            String sql = "SELECT COUNT(*) FROM Movimiento_Inventario WHERE DATE(fecha_movimiento) = CURDATE()";
+            try (PreparedStatement ps = getConn().prepareStatement(sql)) {
+                ResultSet rs = ps.executeQuery(); // ejecuta la consulta
+                if (rs.next()) {
+                    return rs.getInt(1); // retorna el total de movimientos de hoy
+                }
+            } catch (SQLException e) {
+                System.err.println("error contando movimientos: " + e.getMessage());
+            }
+            return 0; // retorna 0 si hubo un error
+        });
+
+        // espera que todas las consultas terminen en paralelo
+        CompletableFuture.allOf(futureProductos, futureCategorias, futureStockBajo, futureMovimientos).join();
+
+        // obtiene los resultados de cada consulta
         int totalProductos = 0;
-        String sqlProductos = "SELECT COUNT(*) FROM Producto WHERE estado = 'Activo'";
-        try (PreparedStatement ps = getConn().prepareStatement(sqlProductos)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                totalProductos = rs.getInt(1); // obtiene el total de productos
-            }
-        } catch (SQLException e) {
-            System.err.println("error contando productos: " + e.getMessage());
-        }
-
-        // consulta el total de categorias activas
         int totalCategorias = 0;
-        String sqlCategorias = "SELECT COUNT(*) FROM Categoria WHERE estado = 'Activo'";
-        try (PreparedStatement ps = getConn().prepareStatement(sqlCategorias)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                totalCategorias = rs.getInt(1); // obtiene el total de categorias
-            }
-        } catch (SQLException e) {
-            System.err.println("error contando categorias: " + e.getMessage());
-        }
-
-        // consulta productos con stock bajo, menos de 10 unidades
         int stockBajo = 0;
-        String sqlStockBajo = "SELECT COUNT(*) FROM Producto WHERE stock < 10 AND estado = 'Activo'";
-        try (PreparedStatement ps = getConn().prepareStatement(sqlStockBajo)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                stockBajo = rs.getInt(1); // obtiene el total de productos con stock bajo
-            }
-        } catch (SQLException e) {
-            System.err.println("error contando stock bajo: " + e.getMessage());
-        }
-
-        // consulta el total de movimientos de hoy
         int movimientosHoy = 0;
-        String sqlMovimientos = "SELECT COUNT(*) FROM Movimiento_Inventario WHERE DATE(fecha_movimiento) = CURDATE()";
-        try (PreparedStatement ps = getConn().prepareStatement(sqlMovimientos)) {
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                movimientosHoy = rs.getInt(1); // obtiene el total de movimientos de hoy
-            }
-        } catch (SQLException e) {
-            System.err.println("error contando movimientos: " + e.getMessage());
+
+        try {
+            totalProductos = futureProductos.get(); // obtiene el total de productos
+            totalCategorias = futureCategorias.get(); // obtiene el total de categorias
+            stockBajo = futureStockBajo.get(); // obtiene el total de productos con stock bajo
+            movimientosHoy = futureMovimientos.get(); // obtiene el total de movimientos de hoy
+        } catch (InterruptedException | ExecutionException e) {
+            System.err.println("error obteniendo resultados concurrentes: " + e.getMessage());
         }
 
-        // consulta los ultimos 5 movimientos registrados
+        // consulta los ultimos 5 movimientos de forma normal
         List<String[]> ultimosMovimientos = new ArrayList<>();
         String sqlUltimos = "SELECT p.nom_producto, tm.nom_tipo_movimiento, mi.cantidad, mi.fecha_movimiento, mi.usuario_creacion "
                 + "FROM Movimiento_Inventario mi "
@@ -93,15 +122,14 @@ public class DashboardServlet extends HttpServlet {
                 + "JOIN Tipo_Movimiento tm ON mi.id_tipo_movimiento = tm.id_tipo_movimiento "
                 + "ORDER BY mi.fecha_movimiento DESC LIMIT 5";
         try (PreparedStatement ps = getConn().prepareStatement(sqlUltimos)) {
-            ResultSet rs = ps.executeQuery();
-            // recorre los resultados y los agrega a la lista
+            ResultSet rs = ps.executeQuery(); // ejecuta la consulta
             while (rs.next()) {
                 String[] fila = new String[5];
-                fila[0] = rs.getString("nom_producto");       // nombre del producto
+                fila[0] = rs.getString("nom_producto"); // nombre del producto
                 fila[1] = rs.getString("nom_tipo_movimiento"); // tipo de movimiento
                 fila[2] = String.valueOf(rs.getInt("cantidad")); // cantidad
-                fila[3] = rs.getString("fecha_movimiento");   // fecha del movimiento
-                fila[4] = rs.getString("usuario_creacion");   // usuario que registro
+                fila[3] = rs.getString("fecha_movimiento"); // fecha del movimiento
+                fila[4] = rs.getString("usuario_creacion"); // usuario que registro
                 ultimosMovimientos.add(fila);
             }
         } catch (SQLException e) {

@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         // busca el usuario en la bd con las credenciales ingresadas
-        Usuario usuario = repo.login(nomUsuario.trim(), contrasena.trim());
+        Usuario usuario = repo.login(nomUsuario.trim(), contrasena.trim()).orElse(null);
 
         // si el usuario es encontrado, inicia sesion y redirige al menu principal
         if (usuario != null) {

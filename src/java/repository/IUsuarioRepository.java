@@ -1,15 +1,13 @@
 package repository;
 
 import modelo.Usuario;
+import java.util.Optional;
 
-// interfaz que define las operaciones de usuario en la bd
-public interface IUsuarioRepository {
+// interfaz especifica para usuarios, extiende la interfaz generica base
+public interface IUsuarioRepository extends IRepository<Usuario> {
 
-    // valida credenciales y retorna el usuario si existe
-    Usuario login(String nomUsuario, String contrasena);
-
-    // registra un nuevo usuario en la bd
-    boolean registrar(Usuario usuario);
+    // valida credenciales y retorna el usuario envuelto en optional si existe
+    Optional<Usuario> login(String nomUsuario, String contrasena);
 
     // actualiza la contrasena de un usuario existente
     boolean cambiarContrasena(String nomUsuario, String contrasenaNueva);

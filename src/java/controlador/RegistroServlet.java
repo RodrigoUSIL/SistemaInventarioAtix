@@ -61,7 +61,7 @@ public class RegistroServlet extends HttpServlet {
 
         // intenta insertar el usuario en la bd
         // si se inserta correctamente redirige al login con mensaje de exito en la url
-        if (repo.registrar(u)) {
+        if (repo.agregar(u)) {
             // redirige al login con mensaje de exito en la url
             response.sendRedirect("login.jsp?exito=cuenta+creada+exitosamente");
         } else { // si hay un error al insertar muestra un error y vuelve al formulario

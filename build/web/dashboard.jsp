@@ -100,7 +100,7 @@
         <%-- navegacion de modulos --%>
         <div class="nav-modulos">
             <a href="dashboard" class="btn-modulo activo">Dashboard</a>
-            <a href="#" class="btn-modulo">Gestión de productos</a>
+            <a href="productos" class="btn-modulo">Gestión de productos</a>
             <a href="#" class="btn-modulo">Movimientos</a>
         </div>
 
