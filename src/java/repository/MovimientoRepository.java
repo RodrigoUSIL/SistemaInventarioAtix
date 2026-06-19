@@ -12,6 +12,14 @@ import java.util.stream.Collectors;
 // implementacion del repositorio de movimientos con lambdas y streams
 public class MovimientoRepository implements IMovimientoRepository {
 
+    // subject para notificar cambios de stock a los observadores
+    private final StockSubject stockSubject = new StockSubject();
+
+    // constructor que registra el observador de alerta de stock bajo
+    public MovimientoRepository() {
+        stockSubject.agregarObservador(new AlertaStockBajo()); // registra el observador de alerta
+    }
+
     // metodo auxiliar para obtener la conexion a la bd
     private Connection getConn() {
         return ConexionDB.getInstancia().getConnection(); // obtiene la conexion del singleton
@@ -119,7 +127,7 @@ public class MovimientoRepository implements IMovimientoRepository {
             } else if (m.getIdTipoMovimiento() == 2) {
                 stockNuevo = stockActual - m.getCantidad(); // salida resta al stock
             } else {
-                stockNuevo = stockActual + m.getCantidad(); // ajuste suma o resta segun cantidad
+                stockNuevo = m.getCantidad(); // ajuste reemplaza el stock con la cantidad ingresada
             }
 
             // asigna el stock anterior y nuevo al movimiento
@@ -148,6 +156,21 @@ public class MovimientoRepository implements IMovimientoRepository {
                 ps.setInt(2, m.getIdProducto()); // asigna el id del producto
                 ps.executeUpdate(); // ejecuta la actualizacion
             }
+
+            // crea un producto temporal para notificar el cambio de stock a los observadores
+            modelo.Producto productoActualizado = new modelo.Producto();
+            productoActualizado.setIdProducto(m.getIdProducto()); // asigna el id del producto
+
+            // busca el nombre real del producto en la bd para la notificacion
+            String nomProducto = listarProductos().stream()
+                    .filter(p -> p[0].equals(String.valueOf(m.getIdProducto()))) // filtra por id
+                    .map(p -> p[1]) // obtiene el nombre del producto
+                    .findFirst()
+                    .orElse("producto " + m.getIdProducto()); // nombre por defecto si no encuentra
+
+            productoActualizado.setNomProducto(nomProducto); // asigna el nombre real del producto
+            productoActualizado.setStock(stockNuevo); // asigna el nuevo stock
+            stockSubject.notificarObservadores(productoActualizado); // notifica a los observadores
 
             conn.commit(); // confirma la transaccion si todo salio bien
             return true; // retorna true si se registro correctamente
