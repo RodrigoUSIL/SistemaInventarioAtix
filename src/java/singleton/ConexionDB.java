@@ -13,17 +13,17 @@ public class ConexionDB {
     // objeto de conexion a la base de datos
     private Connection connection;
 
-// si existe variable de entorno de railway la usa, sino usa la conexion local
+    // si existe variable de entorno de railway la usa, sino usa la conexion local
     private static final String URL = System.getenv("DB_URL") != null
             ? System.getenv("DB_URL")
             : "jdbc:mysql://localhost:3306/InventarioAtix?useSSL=false&serverTimezone=America/Lima";
 
-// si existe variable de entorno de railway la usa, sino usa root local
+    // si existe variable de entorno de railway la usa, sino usa root local
     private static final String USER = System.getenv("DB_USER") != null
             ? System.getenv("DB_USER")
             : "root";
 
-// si existe variable de entorno de railway la usa, sino usa la contrasena local
+    // si existe variable de entorno de railway la usa, sino usa la contrasena local
     private static final String PASSWORD = System.getenv("DB_PASSWORD") != null
             ? System.getenv("DB_PASSWORD")
             : "Root_123";
@@ -51,7 +51,7 @@ public class ConexionDB {
         return instancia;
     }
 
-// retorna la conexion, reconecta si es necesario
+    // retorna la conexion, reconecta si es necesario
     public Connection getConnection() {
         try {
             // si la conexion es nula o esta cerrada, intenta reconectar directamente
